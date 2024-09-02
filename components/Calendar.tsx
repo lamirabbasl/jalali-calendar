@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment-jalaali";
 import "moment/locale/fa";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 moment.loadPersian({ usePersianDigits: true, dialect: "persian-modern" });
 
@@ -29,9 +29,6 @@ const Calendar: React.FC = () => {
   });
 
   useEffect(() => {
-    const year = currentDate.jYear();
-    const month = currentDate.jMonth();
-
     const firstDayOfMonth = moment(currentDate).jDate(1);
     const lastDayOfMonth = moment(currentDate).endOf("jMonth");
 
@@ -79,13 +76,16 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-3 w-full h-[450px] max-w-md mx-auto p-5 bg-white rounded-lg shadow-lg border border-gray-200">
-      <div className="flex justify-between items-center w-full mb-3 mt-0">
+    <div className="flex flex-col relative items-center gap-3 w-full h-[500px] max-w-md mx-auto p-5 bg-white rounded-lg shadow-lg border border-gray-200">
+      <div className="flex justify-between items-center w-full mb-6 mt-5">
         <button
           onClick={nextMonth}
           className="px-3 py-1 text-gray-500 hover:text-gray-700 focus:outline-none"
         >
-          <FaArrowLeft size={20} className="text-blue-500" />
+          <IoIosArrowBack
+            size={20}
+            className="text-black hover:text-blue-500"
+          />
         </button>
         <h2 className="text-[23px] ">
           {currentDate.format("jYYYY")} {currentDate.format("jMMMM")}
@@ -94,14 +94,17 @@ const Calendar: React.FC = () => {
           onClick={prevMonth}
           className="px-3 py-1 text-gray-500 hover:text-gray-700 focus:outline-none"
         >
-          <FaArrowRight size={20} className="text-blue-500" />
+          <IoIosArrowForward
+            size={20}
+            className="text-black hover:text-blue-500"
+          />
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-1 w-full text-md text-right">
+      <div className="grid grid-cols-7 mb-2 gap-1 w-full text-md text-right">
         {daysOfWeek.map((day, index) => (
           <div
             key={index}
-            className="py-2 text-center font-medium text-gray-700"
+            className="py-2 text-center  font-semibold text-gray-400"
           >
             {day}
           </div>
@@ -114,13 +117,19 @@ const Calendar: React.FC = () => {
         {daysInMonth.map((day, index) => (
           <div
             key={index}
-            className={`flex items-center justify-center h-10 w-10 mx-auto text-center rounded-full border border-gray-300 cursor-pointer transition-colors ${
-              day === selectedDate.day &&
-              currentDate.jMonth() + 1 === selectedDate.month &&
-              currentDate.jYear() === selectedDate.year
-                ? "bg-blue-500 text-white"
-                : "bg-white hover:bg-green-100"
-            }`}
+            className={
+              day
+                ? `flex items-center justify-center h-10 w-10 mx-auto text-center rounded-full  hover:border hover:border-gray-200 cursor-pointer transition-colors ${
+                    day === selectedDate.day &&
+                    currentDate.jMonth() + 1 === selectedDate.month &&
+                    currentDate.jYear() === selectedDate.year
+                      ? "bg-black text-white"
+                      : index % 7 === 6
+                      ? "text-red-500"
+                      : "text-black"
+                  }`
+                : ""
+            }
             onClick={() => handleDayClick(day)}
           >
             <span className="ltr">
@@ -129,7 +138,7 @@ const Calendar: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className="fixed top-[550px]">
+      <div className=" absolute top-[450px]">
         <p>
           {selectedDate.day
             ? moment()

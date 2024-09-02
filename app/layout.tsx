@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-lalezar">{children}</body>
+      <body className="font-vazir">{children}</body>
     </html>
   );
 }
